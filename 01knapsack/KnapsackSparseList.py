@@ -1,21 +1,22 @@
 from Direction import Direction
+from MaxSparseList import MaxSparseList
 
 
 class KnapsackSparseList:
     def __init__(self, limit: int):
-        self.options: list[tuple] = [(0, 0, None)]
+        self.options: MaxSparseList = MaxSparseList((0, 0, None), limit)
         self.size = 1
-        self.limit: int = limit
+        self.limit = limit
         return
 
     def addItem(self, newWeight, newValue):
-        newOptions: list[(int, int, Direction)] = []
         j = 0
         current = -1
         n = self.size
         withinLimit = True
-        cur_i = self.options[0]
-        newOptions.append((cur_i[0], cur_i[1], Direction(False, cur_i[2])))
+        cur_i = self.options.data[0]
+        newOptions: MaxSparseList = MaxSparseList((cur_i[0], cur_i[1], Direction(False, cur_i[2])),
+                                                  self.limit)
 
         for cur_i in self.options[1:]:
             while withinLimit:
