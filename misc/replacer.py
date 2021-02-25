@@ -33,8 +33,7 @@ class Checker:
         self.nfa = NFA(X, {n}, L)
         return
     def GenerateIndices(self,string):
-
-
+        
 
 def main():
     X = [
