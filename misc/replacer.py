@@ -1,5 +1,3 @@
-class RangeTree():
-
 class NFA:
     def __init__(self, states: list, final: set, transitions):
         self.states: list = states
