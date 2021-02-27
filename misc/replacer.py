@@ -1,3 +1,5 @@
+class RangeTree():
+
 class NFA:
     def __init__(self, states: list, final: set, transitions):
         self.states: list = states
@@ -66,19 +68,19 @@ class Replacer:
     def Replace(self, start, preserveEndPhrases=False):  # banana, a->na
         A = self.c1.GenerateIndices(start)
         B = self.c2.GenerateIndices(start)
-        la=len(A)
-        lb=len(B)
+        la = len(A)
+        lb = len(B)
         n1 = self.c1.n
         n2 = self.c2.n
-        j0=0
-        for i in range(0,la):
-            a1=A[i]-n2
-            a2=A[i]+n1
-            for j in range(j0,lb):
-                if B[j]>a1:
+        j = 0
+        for i in range(0, la):
+            a1 = A[i] - n2
+            a2 = A[i] + n1
+            for j in range(j, lb):
+                if B[j] > a1:
                     break
-            j0=j
-            
+            j0 = j
+
         # TODO complete this
         return
 
