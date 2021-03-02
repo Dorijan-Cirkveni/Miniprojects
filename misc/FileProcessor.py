@@ -1,7 +1,16 @@
-import iptcinfo3, os, sys, random, string
+# Copied from StackOverflow for learning purposes
+import iptcinfo3
+import os
+import random
+import string
+import sys
+
 
 # Random string gennerator
-rnd = lambda length=3 : ''.join(random.choices(list(string.ascii_letters), k=length))
+def rnd(length=3):
+    return ''.join(random.choices(list(string.ascii_letters), k=length))
+
+
 # Path to the file, open a IPTCInfo object
 path = os.path.join(sys.path[0], 'DSC_7960.jpg')
 info = iptcinfo3.IPTCInfo(path)
