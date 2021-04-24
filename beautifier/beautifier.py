@@ -41,11 +41,14 @@ def merge(T, mergeLimit=60, itemSurplus=1):
     s = ''.join(T)
     return s
 
-def generateString(T,indent='-|'):
-    s=''
-    log=deque()
-    log.append()
 
+def generateString(T, L: list, indent='-|', depth=0):
+    for e in T:
+        if type(e) == str:
+            L.append(indent * depth + e)
+            continue
+        generateString(e, L, indent, depth + 1)
+    return
 
 
 def unbeautify(s):
@@ -61,15 +64,26 @@ def beautifyFile(inputPath, outputPath):
     L2 = list()
     for e in L:
         T = createTree(e)
-        T2=merge(T,20)
+        T2 = merge(T, 20)
+        if type(T2) != str:
+            generateString(T, L2)
+            continue
+        L2.append(T2)
     F = open(outputPath, 'w')
     F.write('\n'.join(L2))
     F.close()
     return
 
 
-def main():
+def test():
     beautifyFile('beautifier\\test_in.txt', 'beautifier\\test_out.txt')
+    return
+
+
+def main():
+    ins = input('Input file path:')
+    outs = input('Output file path:')
+    beautifyFile(ins, outs)
     return
 
 
