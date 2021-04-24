@@ -25,16 +25,26 @@ def createTree(s, up='({[', down=')}]', same=';'):
             cur[-1] += e
     return res
 
-def merge(T,mergeLimit=60,itemSurplus=1):
-    c=0
+
+def merge(T, mergeLimit=60, itemSurplus=1):
+    c = 0
     for i in range(len(T)):
-        el=T[i]
-        if type(el)!=str:
-            el=merge(el,mergeLimit,itemSurplus)
-            if type(el)!=str:
+        el = T[i]
+        if type(el) != str:
+            el = merge(el, mergeLimit, itemSurplus)
+            if type(el) != str:
                 return T
-            T[i]=el
-        c+=len(el)-itemSurplus
+            T[i] = el
+        c += len(el) - itemSurplus
+    if c >= mergeLimit:
+        return T
+    s = ''.join(T)
+    return s
+
+def generateString(T,indent='-|'):
+    s=''
+    log=deque()
+    log.append()
 
 
 
@@ -51,7 +61,7 @@ def beautifyFile(inputPath, outputPath):
     L2 = list()
     for e in L:
         T = createTree(e)
-        print(len(T))
+        T2=merge(T,20)
     F = open(outputPath, 'w')
     F.write('\n'.join(L2))
     F.close()
