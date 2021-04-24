@@ -1,4 +1,3 @@
-import bisect
 import json
 import os
 
@@ -9,16 +8,25 @@ def getDate(ledgerdate):
     return int(ledgerdate.split('T')[0].replace('-', ''))
 
 
+def saveToCache():
+    # TODO
+    return
+
+
 def scrapeToCache(link, cachename):
-    cache = 'cache\\' + cachename
-    if not os.path.exists(cache):
-        page = requests.get(link)
-        F = open(cache, 'wb')
-        F.write(page.content)
+    if cachename is not None:
+        cache = 'cache\\' + cachename
+        if not os.path.exists(cache):
+            page = requests.get(link)
+            F = open(cache, 'wb')
+            F.write(page.content)
+            F.close()
+        F = open(cache, 'rb')
+        content = F.read()
         F.close()
-    F = open(cache, 'rb')
-    content = F.read()
-    F.close()
+    else:
+        page = requests.get(link)
+        content = page.content
     X = json.loads(content)
     return X
 
@@ -41,19 +49,41 @@ def getLastLedgerNumber():
     return ledgerdict['_embedded']['records'][0]['sequence']
 
 
-def identify_greq(date, knownDates: dict):
-    L = list(knownDates.keys())
-    L.sort()
-    V = [knownDates[e] for e in L]
-    return
+def getSendersForAllTransactions(currentLink, cacheUse=True):
+    i = 0
+    score = dict()
+    if cacheUse:
+        pass  # TODO
+    while True:
+        ledgerdict = scrapeToCache(currentLink, None)
+        txList = ledgerdict['_embedded']["records"]
+        if len(txList) == 0:
+            break
+        for tx in txList:
+            source = tx["source_account"]
+            if source not in score:
+                score[source] = 0
+            score[source] += 1
+        currentLink = ledgerdict['_links']['next']['href']
+        i += 1
+    return score
 
 
-def identify_sender(transactionDict):
+def getSendersForLedgersInRange(beginLedger, endLedger):
+    sdx = dict()
+    for i in range(beginLedger, endLedger):
+        print(i)
+        data = getSendersForAllTransactions('https://api.testnet.minepi.com/ledgers/{}/transactions'
+                                            .format(str(i)))
+        for e in data:
+            if e not in sdx:
+                sdx[e] = 0
+            sdx[e] += data[e]
+    return  # TODO
 
 
 def main():
-    last = getLastLedgerNumber()
-    data = scrapeToCache("https://api.testnet.minepi.com/ledgers/1354636", 'ld_1354636.txt')
+    getSendersForLedgersInRange(1373100, 1373150)
     return
 
 
