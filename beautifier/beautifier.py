@@ -58,10 +58,11 @@ def justify(L, space, itemSurplus=1):
 
 
 def merge(T, mergeLimit=60, itemSurplus=1):
+    if len(T) == 0:
+        return ''
     c = 0
     NT = []
     cur_L = []
-    T.append([])
     for i in range(len(T)):
         el = T[i]
         if type(el) != str:
@@ -71,11 +72,18 @@ def merge(T, mergeLimit=60, itemSurplus=1):
                 if ext is not None:
                     NT.extend(ext)
                 NT.append(el)
-            if len(el)!=0 and not el[0]:
+            if len(el) != 0 and not el[0]:
                 print(el)
-        cur_L.append(el)
+        else:
+            cur_L.append(el)
+    ext = justify(cur_L, mergeLimit, itemSurplus)
+    if ext is not None:
+        NT.extend(ext)
+    NT.append(el)
     if len(NT) == 1:
         return NT[0]
+    if len(NT) == 0:
+        return ''
     return NT
 
 
@@ -96,7 +104,8 @@ def unbeautify(s):
 
 def beautifyFile(inputPath, outputPath):
     F = open(inputPath, 'r')
-    L = F.read().split("\n")
+    L_RAW = F.read().split("\n")
+    L=[e for e in L_RAW if len(e)!=0]
     F.close()
     L2 = list()
     for e in L:
