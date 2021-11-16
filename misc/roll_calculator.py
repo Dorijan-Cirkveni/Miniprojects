@@ -33,7 +33,7 @@ def setup_outcomes_genshin_char():
     return outcomes
 
 
-def simulate_genshin_banner_character_odds(startPity, wishesLeft, lost5050=False):
+def simulate_genshin_banner_character_odds(startPity, wishesLeft:set, lost5050=False):
     """
 
     """
@@ -41,7 +41,9 @@ def simulate_genshin_banner_character_odds(startPity, wishesLeft, lost5050=False
     outcomes = setup_outcomes_genshin_char()
     start = {str(lost5050 * 1) + '-' + str(startPity): 1}
     resultOdds = 0
-    for i in range(wishesLeft):
+    wishLimit=max(wishesLeft)
+    results=[]
+    for i in range(wishLimit):
         end = calculate_pull(start, outcomes)
         if '0-0' in end:  # This is a temporary solution.
             resultOdds += end['0-0']
@@ -49,6 +51,8 @@ def simulate_genshin_banner_character_odds(startPity, wishesLeft, lost5050=False
             end.pop('0-0')
         # print(time.time() - startTime)
         start = end
+        if i+1 in wishesLeft:
+            results+=resultOdds
     return resultOdds
 
 
